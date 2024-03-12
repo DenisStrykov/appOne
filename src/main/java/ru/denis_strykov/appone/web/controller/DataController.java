@@ -28,7 +28,7 @@ public class DataController {
     @PostMapping("/send")
     public void send(
             @RequestBody DataDto dto
-            ) {
+    ) {
         Data data = dataMapper.toEntity(dto);
         kafkaDataService.send(data);
     }
