@@ -25,7 +25,7 @@ public class KafkaDataServiceImpl implements KafkaDataService {
                         Mono.just(
                                 SenderRecord.create(
                                         topic,
-                                        0,
+                                        (int) (Math.random() * 5),
                                         System.currentTimeMillis(),
                                         String.valueOf(data.hashCode()),
                                         data,
