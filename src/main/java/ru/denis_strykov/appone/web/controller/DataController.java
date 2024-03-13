@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.denis_strykov.appone.model.Data;
 import ru.denis_strykov.appone.model.test.DataTestOptions;
+import ru.denis_strykov.appone.service.GRPCDataService;
+import ru.denis_strykov.appone.service.GRPCTestDataService;
 import ru.denis_strykov.appone.service.KafkaDataService;
 import ru.denis_strykov.appone.service.TestDataService;
 import ru.denis_strykov.appone.web.dto.DataDto;
@@ -21,6 +23,9 @@ public class DataController {
 
     private final KafkaDataService kafkaDataService;
     private final TestDataService testDataService;
+    private final GRPCDataService grpcDataService;
+    private final GRPCTestDataService grpcTestDataService;
+
 
     private final DataMapper dataMapper;
     private final DataTestOptionsMapper dataTestOptionsMapper;
@@ -37,6 +42,18 @@ public class DataController {
     public void testSend(@RequestBody DataTestOptionsDto testOptionsDto) {
         DataTestOptions testOptions = dataTestOptionsMapper.toEntity(testOptionsDto);
         testDataService.sendMessages(testOptions);
+    }
+
+    @PostMapping("/grpc/send")
+    public void grpcSend(@RequestBody DataDto dataDto) {
+        Data data = dataMapper.toEntity(dataDto);
+        grpcDataService.send(data);
+    }
+
+    @PostMapping("/grpc/test/send")
+    public void grpcTestSend(@RequestBody DataTestOptionsDto testOptionsDto) {
+        DataTestOptions testOptions = dataTestOptionsMapper.toEntity(testOptionsDto);
+        grpcTestDataService.sendMessages(testOptions);
     }
 
 }
